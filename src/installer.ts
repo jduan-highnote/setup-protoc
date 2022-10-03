@@ -186,15 +186,18 @@ async function computeVersion(
   }
 
   const allVersions = await fetchVersions(includePreReleases, repoToken);
-  const validVersions = allVersions.filter(v => semver.valid(v));
-  const possibleVersions = validVersions.filter(v => v.startsWith(version));
+  process.stdout.write("allVersions:" + allVersions);
+  const possibleVersions = allVersions.filter(v => v.startsWith(version));
+  process.stdout.write("possibleVersions: " + possibleVersions);
 
   const versionMap = new Map();
   possibleVersions.forEach(v => versionMap.set(normalizeVersion(v), v));
+  process.stdout.write("versionMap: " + versionMap);
 
   const versions = Array.from(versionMap.keys())
     .sort(semver.rcompare)
     .map(v => versionMap.get(v));
+  process.stdout.write("versions: " + versions);
 
   core.debug(`evaluating ${versions.length} versions`);
 
